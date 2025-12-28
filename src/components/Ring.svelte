@@ -8,7 +8,6 @@
 	const intervals: number[] = [1, 3, 5, 10, 20];
 
 	function playChime(): void {
-		console.log('playChime');
 		if (!audio) {
 			audio = new Audio('/assets/bell.mp3');
 		}
@@ -34,6 +33,12 @@
 		isActive = !isActive;
 		if (isActive) startTimer();
 		else stopTimer();
+	};
+
+	const handleVolume = (newVolume: number) => {
+		volume = newVolume;
+		if (isActive) startTimer();
+		else playChime();
 	};
 </script>
 
@@ -62,7 +67,6 @@
 						: ''}"
 				></span>
 			</button>
-			<span class="text-base font-semibold text-[#4a7c59]">{isActive ? 'Active' : 'Inactive'}</span>
 		</div>
 
 		<div class="w-full rounded-2xl bg-white px-5 py-4 shadow-sm">
@@ -74,7 +78,8 @@
 				type="range"
 				min="0"
 				max="100"
-				bind:value={volume}
+				value={volume}
+				onchange={(e) => handleVolume(+e.currentTarget.value)}
 				class="h-1.5 w-full cursor-pointer appearance-none rounded bg-gray-200 outline-none
 					[&::-moz-range-thumb]:h-[18px] [&::-moz-range-thumb]:w-[18px] [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:bg-[#4a7c59] [&::-moz-range-thumb]:shadow
 					[&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#4a7c59] [&::-webkit-slider-thumb]:shadow"
@@ -86,7 +91,7 @@
 			<div class="flex justify-center gap-2">
 				{#each intervals as mins}
 					<button
-						class="min-w-12 cursor-pointer rounded-lg border px-4 py-2.5 text-[0.95rem] transition-all duration-200 {interval ===
+						class="min-w-12 cursor-pointer rounded-lg border text-center text-[0.95rem] transition-all duration-200 {interval ===
 						mins
 							? 'border-[#4a7c59] bg-[#4a7c59] text-white'
 							: 'border-gray-200 bg-white text-[#5a6a5a] hover:bg-gray-100'}"
